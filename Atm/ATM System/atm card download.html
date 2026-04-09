@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ATM Card Download</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+
+body{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#141e30,#243b55);
+  font-family:Arial;
+  color:#fff;
+}
+
+.container{
+  width:100%;
+  max-width:420px;
+  padding:25px;
+  border-radius:15px;
+  background:rgba(255,255,255,0.1);
+  text-align:center;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border:none;
+  border-radius:10px;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(90deg,#00c6ff,#0072ff);
+  color:#fff;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.05);
+}
+
+/* loader */
+.loader{
+  display:none;
+  margin-top:10px;
+}
+
+.bar{
+  height:6px;
+  background:linear-gradient(90deg,#ffd700,#00c6ff);
+  animation:load 2s forwards;
+}
+
+@keyframes load{
+  from{width:0}
+  to{width:100%}
+}
+
+/* ATM FRONT */
+.card{
+  width:320px;
+  height:190px;
+  margin-top:20px;
+  padding:18px;
+  border-radius:15px;
+  background:linear-gradient(135deg,#000428,#004e92);
+  position:relative;
+  visibility:hidden;
+}
+
+/* ATM BACK */
+.card-back{
+  width:320px;
+  height:190px;
+  margin-top:20px;
+  padding:18px;
+  border-radius:15px;
+  background:linear-gradient(135deg,#232526,#414345);
+  position:relative;
+  visibility:hidden;
+}
+
+.vip{
+  position:absolute;
+  top:15px;
+  right:15px;
+  color:gold;
+  font-weight:bold;
+}
+
+.bank{
+  font-weight:bold;
+}
+
+.number{
+  margin-top:40px;
+  font-size:20px;
+  letter-spacing:2px;
+}
+
+.name{
+  position:absolute;
+  bottom:20px;
+  left:15px;
+}
+
+.exp{
+  position:absolute;
+  bottom:20px;
+  right:15px;
+}
+
+.back-info{
+  margin-top:20px;
+  font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>💳 ATM Card Download</h2>
+
+<input id="cardInput" placeholder="Enter ATM Number">
+<button onclick="downloadCard()">Download ATM PDF</button>
+
+<div class="loader" id="loader">
+  <div class="bar"></div>
+  <p>Processing...</p>
+</div>
+
+<p id="msg"></p>
+
+<!-- FRONT -->
+<div class="card" id="cardFront">
+  <div class="vip">VIP CARD</div>
+  <div class="bank">S.K BANK</div>
+
+  <div class="number" id="f_number"></div>
+  <div class="name" id="f_name"></div>
+  <div class="exp" id="f_exp"></div>
+</div>
+
+<!-- BACK -->
+<div class="card-back" id="cardBack">
+  <div class="bank">S.K BANK</div>
+
+  <div class="back-info">
+    <p>👤 Holder: <span id="b_name"></span></p>
+    <p>🏦 Bank: S.K BANK</p>
+    <p>📅 Expiry: <span id="b_exp"></span></p>
+  </div>
+</div>
+
+</div>
+
+<script>
+
+const { jsPDF } = window.jspdf;
+
+/* get data */
+function getUsers(){
+  return JSON.parse(localStorage.getItem("sk_bank_users")) || [];
+}
+
+function msg(t){
+  document.getElementById("msg").innerText = t;
+}
+
+/* MAIN FUNCTION */
+async function downloadCard(){
+
+  let num = document.getElementById("cardInput").value.trim();
+
+  if(!num){
+    return msg("❌ Enter ATM number");
+  }
+
+  let users = getUsers();
+
+  /* ✅ FIXED SEARCH (ALL POSSIBLE KEYS) */
+  let user = users.find(u =>
+    String(u.accountNumber).trim() === num ||
+    String(u.cardNumber).trim() === num ||
+    String(u.customerNumber).trim() === num
+  );
+
+  if(!user){
+    return msg("❌ ATM number not found");
+  }
+
+  document.getElementById("loader").style.display="block";
+
+  /* SHOW CARD */
+  document.getElementById("cardFront").style.visibility="visible";
+  document.getElementById("cardBack").style.visibility="visible";
+
+  /* SET DATA */
+  document.getElementById("f_number").innerText = user.accountNumber;
+  document.getElementById("f_name").innerText = user.fullName;
+  document.getElementById("f_exp").innerText = "EXP: 12/30";
+
+  document.getElementById("b_name").innerText = user.fullName;
+  document.getElementById("b_exp").innerText = "12/30";
+
+  /* WAIT RENDER */
+  await new Promise(r => setTimeout(r, 500));
+
+  const pdf = new jsPDF();
+
+  /* FRONT */
+  const frontCanvas = await html2canvas(document.getElementById("cardFront"), { scale: 2 });
+
+  pdf.addImage(frontCanvas.toDataURL("image/png"), "PNG", 10, 20, 180, 100);
+
+  pdf.addPage();
+
+  /* BACK */
+  const backCanvas = await html2canvas(document.getElementById("cardBack"), { scale: 2 });
+
+  pdf.addImage(backCanvas.toDataURL("image/png"), "PNG", 10, 20, 180, 100);
+
+  pdf.save("ATM_CARD.pdf");
+
+  document.getElementById("loader").style.display="none";
+
+  msg("✅ ATM Card Downloaded Successfully");
+
+}
+
+</script>
+
+</body>
+</html>
