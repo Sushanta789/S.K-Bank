@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.K Bank Entry</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:black;
+overflow:hidden;
+color:white;
+}
+
+/* VIDEO BACKGROUND */
+video{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:-1;
+}
+
+/* DARK OVERLAY */
+.overlay{
+position:absolute;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+}
+
+/* CONTENT */
+.container{
+text-align:center;
+z-index:2;
+}
+
+/* TITLE */
+.title{
+font-size:50px;
+color:#ffd700;
+text-shadow:0 0 15px #ffd700,0 0 30px #ffae00;
+animation:zoomIn 1.5s ease;
+}
+
+/* SUBTITLE */
+.subtitle{
+margin-top:10px;
+font-size:18px;
+opacity:0;
+animation:fadeIn 2s ease 1s forwards;
+}
+
+/* BUTTON */
+.btn{
+margin-top:25px;
+padding:14px 30px;
+border:none;
+border-radius:12px;
+background:linear-gradient(90deg,#00c6ff,#0072ff);
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+/* LOADING */
+.loader{
+margin-top:25px;
+display:none;
+}
+
+.loadingBox{
+width:260px;
+height:8px;
+background:rgba(255,255,255,0.2);
+border-radius:10px;
+margin:auto;
+overflow:hidden;
+}
+
+.bar{
+height:100%;
+width:0;
+background:linear-gradient(90deg,#ffd700,#00c6ff);
+animation:load 3s forwards;
+}
+
+.loadingText{
+margin-top:10px;
+font-size:14px;
+}
+
+/* ANIMATIONS */
+@keyframes load{
+from{width:0}
+to{width:100%}
+}
+
+@keyframes zoomIn{
+from{transform:scale(0.6);opacity:0}
+to{transform:scale(1);opacity:1}
+}
+
+@keyframes fadeIn{
+to{opacity:1}
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎬 VIDEO -->
+<video autoplay muted loop id="bgVideo">
+<source src="S.K Bank.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<div class="container">
+
+<div class="title">S.K BANK</div>
+<div class="subtitle">Your Trust, Our Commitment</div>
+
+<button class="btn" onclick="startBank()">Enter S.K Bank</button>
+
+<div class="loader" id="loader">
+<div class="loadingBox">
+<div class="bar"></div>
+</div>
+<div class="loadingText">Starting Secure Banking...</div>
+</div>
+
+</div>
+
+<!-- 🔊 SOUND -->
+<audio id="introSound">
+<source src="S.K Bank.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+function startBank(){
+
+let sound = document.getElementById("introSound");
+
+/* SHOW LOADER */
+document.getElementById("loader").style.display="block";
+
+/* HIDE BUTTON */
+document.querySelector(".btn").style.display="none";
+
+/* PLAY SOUND (works because user clicked) */
+sound.play();
+
+/* REDIRECT AFTER LOADING */
+setTimeout(function(){
+window.location.href="home.html";
+},4500);
+
+}
+
+</script>
+
+</body>
+</html>
