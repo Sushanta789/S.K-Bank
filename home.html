@@ -7,6 +7,7 @@
 
 <style>
 
+/* RESET */
 *{
 margin:0;
 padding:0;
@@ -30,6 +31,7 @@ justify-content:space-between;
 background:rgba(0,0,0,0.3);
 backdrop-filter:blur(10px);
 box-shadow:0 5px 15px rgba(0,0,0,0.4);
+flex-wrap:wrap;
 }
 
 /* LOGO */
@@ -45,6 +47,7 @@ color:#00e5ff;
 display:flex;
 gap:10px;
 flex-wrap:wrap;
+margin-top:10px;
 }
 
 .nav-buttons button{
@@ -165,6 +168,13 @@ background:rgba(0,0,0,0.3);
 font-size:14px;
 }
 
+/* MOBILE */
+@media(max-width:600px){
+.title{
+font-size:28px;
+}
+}
+
 </style>
 </head>
 
@@ -179,23 +189,22 @@ font-size:14px;
 
 <div class="nav-buttons">
 
-<button onclick="location.href='Bank system/Bank open/registration.html'">Account Open</button>
+<button onclick="location.href='Bank System/Bank Open/registration.html'">Account Open</button>
 
-<button onclick="location.href='Bank system/Bank open/login.html'">Login</button>
+<button onclick="location.href='bank_system/bank_open/login.html'">Login</button>
 
-<button onclick="location.href='Bank system/search.html'">Search</button>
+<button onclick="location.href='bank_system/search.html'">Search</button>
 
-<button onclick="location.href='Bank system/transaction history.html'">Transaction</button>
+<button onclick="location.href='bank_system/transaction_history.html'">Transaction</button>
 
-<button onclick="location.href='Atm/home.html'">ATM Home</button>
+<button onclick="location.href='atm/home.html'">ATM Home</button>
 
-<button onclick="location.href='Bank system/Bank transaction/Deposit.html'">Deposit</button>
+<button onclick="location.href='bank_system/bank_transaction/deposit.html'">Deposit</button>
 
-<button onclick="location.href='Bank system/bank panel.html'">Bank panel</button>
+<button onclick="location.href='bank_system/bank_panel.html'">Bank Panel</button>
 
-<button onclick="location.href='Music/home.html'">Music System</button>
+<button onclick="location.href='music/home.html'">Music System</button>
 
-<!-- 🎵 MUSIC BUTTON -->
 <button id="musicBtn" onclick="toggleMusic()">🔇 Music OFF</button>
 
 </div>
@@ -204,10 +213,9 @@ font-size:14px;
 
 <div class="banner">
 
-<img src="image/S.K Bank's grand heritage vision.png">
+<img src="image/bank-banner.png" alt="Bank Banner">
 
 <div class="title">Welcome to S.K Bank</div>
-
 <div class="subtitle">Your Trust, Our Priority</div>
 
 </div>
@@ -236,12 +244,12 @@ font-size:14px;
 
 <div class="service-card">
 <h3>Fast Deposit</h3>
-<p>Add money to your bank account instantly.</p>
+<p>Add money instantly to your account.</p>
 </div>
 
 <div class="service-card">
 <h3>Admin Panel</h3>
-<p>Approve ATM cards and manage accounts.</p>
+<p>Manage accounts and approvals.</p>
 </div>
 
 </div>
@@ -257,18 +265,12 @@ const btn = document.getElementById("musicBtn");
 
 music.volume = 0.5;
 
-/* TRY AUTO PLAY */
-window.addEventListener("load", () => {
-    music.play().then(() => {
-        btn.innerText = "🔊 Music ON";
-    }).catch(() => {
-        btn.innerText = "🔇 Click to Start Music";
-    });
-});
-
-/* START ON FIRST USER CLICK (IMPORTANT) */
+/* PLAY AFTER USER INTERACTION (BEST PRACTICE) */
 document.body.addEventListener("click", () => {
-    music.play();
+    if (music.paused) {
+        music.play();
+        btn.innerText = "🔊 Music ON";
+    }
 }, { once: true });
 
 /* TOGGLE MUSIC */
