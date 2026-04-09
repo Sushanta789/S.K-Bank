@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>S.K Bank Deposit Page</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .deposit-container {
+      width: 100%;
+      max-width: 450px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.35);
+      color: #fff;
+      animation: fadeInUp 0.8s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 30px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 14px;
+      color: #d8f3ff;
+      margin-bottom: 22px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+      animation: fadeIn 0.7s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #eefaff;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      outline: none;
+      border-radius: 12px;
+      font-size: 15px;
+      background: rgba(255,255,255,0.93);
+      color: #222;
+      transition: 0.3s ease;
+    }
+
+    input:focus {
+      transform: scale(1.01);
+      box-shadow: 0 0 0 3px rgba(0,198,255,0.25);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+      margin-top: 8px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(0,114,255,0.35);
+    }
+
+    .message {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 12px;
+      text-align: center;
+      display: none;
+      font-size: 14px;
+      animation: popIn 0.4s ease;
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: scale(0.92);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .success {
+      background: rgba(0, 200, 83, 0.18);
+      color: #b9ffd0;
+      border: 1px solid rgba(0, 200, 83, 0.35);
+    }
+
+    .error {
+      background: rgba(255, 82, 82, 0.16);
+      color: #ffd1d1;
+      border: 1px solid rgba(255, 82, 82, 0.35);
+    }
+
+    .result-box {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.10);
+      display: none;
+      animation: zoomIn 0.5s ease;
+    }
+
+    @keyframes zoomIn {
+      from {
+        opacity: 0;
+        transform: scale(0.92);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .result-box p {
+      margin: 8px 0;
+      font-size: 15px;
+      color: #eef7ff;
+      word-break: break-word;
+    }
+
+    .balance {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 14px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      background: linear-gradient(90deg, rgba(0,198,255,0.18), rgba(0,114,255,0.25));
+      animation: glowPulse 0.8s ease;
+    }
+
+    @keyframes glowPulse {
+      0% { transform: scale(0.96); opacity: 0.8; }
+      50% { transform: scale(1.03); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="deposit-container">
+    <h1>S.K Bank</h1>
+    <p class="subtitle">Deposit Amount Page</p>
+
+    <form id="depositForm">
+      <div class="form-group">
+        <label for="accountNumber">Account Number</label>
+        <input type="text" id="accountNumber" placeholder="Enter account number" required />
+      </div>
+
+      <div class="form-group">
+        <label for="customerNumber">Customer Number</label>
+        <input type="text" id="customerNumber" placeholder="Enter customer number" required />
+      </div>
+
+      <div class="form-group">
+        <label for="amount">Deposit Amount</label>
+        <input type="number" id="amount" placeholder="Enter deposit amount" min="1" step="0.01" required />
+      </div>
+
+      <button type="submit" class="btn">Submit Deposit</button>
+    </form>
+
+    <div id="messageBox" class="message"></div>
+
+    <div id="resultBox" class="result-box">
+      <p><strong>Bank Name:</strong> S.K Bank</p>
+      <p><strong>Account Number:</strong> <span id="showAccount"></span></p>
+      <p><strong>Customer Number:</strong> <span id="showCustomer"></span></p>
+      <div class="balance">
+        New Balance: ₹<span id="showBalance"></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const depositForm = document.getElementById("depositForm");
+    const messageBox = document.getElementById("messageBox");
+    const resultBox = document.getElementById("resultBox");
+
+    function getUsers() {
+      return JSON.parse(localStorage.getItem("sk_bank_users")) || [];
+    }
+
+    function saveUsers(users) {
+      localStorage.setItem("sk_bank_users", JSON.stringify(users));
+    }
+
+    function getTransactions() {
+      return JSON.parse(localStorage.getItem("sk_bank_transactions")) || [];
+    }
+
+    function saveTransactions(transactions) {
+      localStorage.setItem("sk_bank_transactions", JSON.stringify(transactions));
+    }
+
+    function addTransaction(accountNumber, customerNumber, type, amount) {
+      const transactions = getTransactions();
+      const now = new Date();
+
+      const transaction = {
+        accountNumber: accountNumber,
+        customerNumber: customerNumber,
+        type: type,
+        amount: Number(amount).toFixed(2),
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString()
+      };
+
+      transactions.push(transaction);
+      saveTransactions(transactions);
+    }
+
+    function showMessage(text, type) {
+      messageBox.style.display = "block";
+      messageBox.className = "message " + type;
+      messageBox.textContent = text;
+    }
+
+    depositForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const accountNumber = document.getElementById("accountNumber").value.trim();
+      const customerNumber = document.getElementById("customerNumber").value.trim();
+      const amount = parseFloat(document.getElementById("amount").value);
+
+      if (!accountNumber || !customerNumber || isNaN(amount) || amount <= 0) {
+        showMessage("Please enter valid account number, customer number and amount.", "error");
+        resultBox.style.display = "none";
+        return;
+      }
+
+      const users = getUsers();
+
+      const userIndex = users.findIndex(user =>
+        user.accountNumber === accountNumber &&
+        user.customerNumber === customerNumber
+      );
+
+      if (userIndex === -1) {
+        showMessage("Invalid account number or customer number.", "error");
+        resultBox.style.display = "none";
+        return;
+      }
+
+      users[userIndex].balance = Number(users[userIndex].balance || 0) + amount;
+      saveUsers(users);
+
+      addTransaction(accountNumber, customerNumber, "DEPOSIT", amount);
+
+      showMessage("Deposit successful! Balance increased and transaction saved.", "success");
+
+      document.getElementById("showAccount").textContent = users[userIndex].accountNumber;
+      document.getElementById("showCustomer").textContent = users[userIndex].customerNumber;
+      document.getElementById("showBalance").textContent = Number(users[userIndex].balance).toFixed(2);
+
+      resultBox.style.display = "block";
+      depositForm.reset();
+    });
+  </script>
+
+</body>
+</html>
